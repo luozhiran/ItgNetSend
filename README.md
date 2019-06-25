@@ -24,7 +24,7 @@ public class App extends Application {
 #### ItgNetSend请求
         
 ```
-     使用配置中配置的地址
+     使用App中配置的地址
       ItgNetSend.itg()
                 .builder(ItgNetSend.GET)//使用app里设置的地址请求
                 .send(new ItgCallback() {
