@@ -2,6 +2,8 @@ package com.sup.itg.netlib.okhttpLib.interfaces;
 
 import android.os.Handler;
 
+import java.io.File;
+
 import okhttp3.Callback;
 import okhttp3.Response;
 
@@ -18,4 +20,7 @@ public interface Builder {
 
     void send(Callback response);
 
+    Builder addFile(File file);
+
+    Builder addContent(String content,String mediaType);
 }

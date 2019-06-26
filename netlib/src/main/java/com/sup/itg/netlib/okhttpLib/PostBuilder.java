@@ -1,14 +1,9 @@
 package com.sup.itg.netlib.okhttpLib;
 
-import java.io.IOException;
-
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 public class PostBuilder extends AdapterBuilder {
 
@@ -25,7 +20,7 @@ public class PostBuilder extends AdapterBuilder {
         }
         builder.tag(mUrl);
         builder.url(mUrl);
-        builder.post(getFromBody());
+        builder.post(getRequestBody());
         Call call = mOkHttpClient.newCall(builder.build());
         return call;
     }

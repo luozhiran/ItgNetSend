@@ -9,13 +9,19 @@ import com.sup.itg.netlib.ItgNetSend;
 import com.sup.itg.netlib.okhttpLib.interfaces.Builder;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgCallback;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public abstract class AdapterBuilder implements Builder {
@@ -23,6 +29,9 @@ public abstract class AdapterBuilder implements Builder {
     protected String mUrl = ItgNetSend.itg().itgSet().getItgUrl();
     protected StringBuilder mHeaderSb = new StringBuilder();
     protected StringBuilder mParamSb = new StringBuilder();
+    protected List<File> mFiles;
+    protected List<String> mContents;
+    protected List<String> mContentMediaTypes;
 
     public AdapterBuilder(OkHttpClient okHttpClient) {
         mOkHttpClient = okHttpClient;
@@ -47,6 +56,29 @@ public abstract class AdapterBuilder implements Builder {
         return this;
     }
 
+    @Override
+    public Builder addFile(File file) {
+        if (mFiles == null) {
+            mFiles = new ArrayList<>();
+        }
+        if (file != null) {
+            mFiles.add(file);
+        }
+        return this;
+    }
+
+    @Override
+    public Builder addContent(String content, String mediaType) {
+        if (mContents == null) {
+            mContents = new ArrayList<>();
+        }
+        if (mContentMediaTypes == null) {
+            mContentMediaTypes = new ArrayList<>();
+        }
+        mContents.add(content);
+        mContentMediaTypes.add(content);
+        return this;
+    }
 
     protected Headers getHeader() {
         if (!TextUtils.isEmpty(mHeaderSb) && mHeaderSb.length() > 0) {
@@ -82,7 +114,22 @@ public abstract class AdapterBuilder implements Builder {
         }
     }
 
-    protected FormBody getFromBody() {
+
+    protected RequestBody getRequestBody() {
+        return getMultipartBody();
+    }
+
+
+    public MediaType getFileType(String fileName) {
+        if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
+            return MediaType.parse("image/jpg");
+        } else {
+            return null;
+        }
+    }
+
+
+    private FormBody getFormBody() {
         FormBody.Builder builder = new FormBody.Builder();
         if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
             String[] key_value = mParamSb.toString().split("//$");
@@ -92,6 +139,43 @@ public abstract class AdapterBuilder implements Builder {
                 if (s != null && s.length == 2) {
                     builder.add(s[0], s[1]);
                 }
+            }
+        }
+        return builder.build();
+    }
+
+    private RequestBody getUpdateRequestBody() {
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, "fsdfsdfsdfsdfsdf");
+        return body;
+    }
+
+    private MultipartBody getMultipartBody() {
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
+            String[] key_value = mParamSb.toString().split("//$");
+            if (key_value == null || key_value.length == 0) return builder.build();
+            for (String value : key_value) {
+                String[] s = value.split("#");
+                if (s != null && s.length == 2) {
+                    builder.addFormDataPart(s[0], s[1]);
+                }
+            }
+        }
+        if (mContents != null && mContents.size() > 0) {
+            int count = 0;
+            for (String s : mContents) {
+                MediaType mediaType = MediaType.parse(mContentMediaTypes.get(count));
+                RequestBody requestBody = RequestBody.create(mediaType, s);
+                builder.addFormDataPart("file", "content" + count, requestBody);
+                count++;
+            }
+        }
+        if (mFiles != null) {
+            for (File file : mFiles) {
+                RequestBody fileBody = RequestBody.create(getFileType(file.getName()), file);
+                builder.addFormDataPart("file", file.getName(), fileBody);
             }
         }
         return builder.build();
