@@ -1,12 +1,7 @@
 # ItgNetSend
 
-
-      
-      
-
 #### ItgNetSend配置
 ```
-
 public class App extends Application {
     @Override
     public void onCreate() {
@@ -20,9 +15,8 @@ public class App extends Application {
 }
         
 ```
-
 #### ItgNetSend请求
-        
+
 ```
      使用App中配置的地址
       ItgNetSend.itg()
@@ -120,5 +114,21 @@ public class App extends Application {
         
         
         可恢复监听器，在退出activity时，不会保存activity的引用
+
+
+
         
+```
+
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+	dependencies {
+    	        implementation 'com.github.luozhiran:ItgNetSend:Tag'
+    	}
 ```
