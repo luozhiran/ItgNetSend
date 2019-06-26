@@ -20,7 +20,7 @@ import com.sup.itg.netlib.okhttpLib.interfaces.ItgProgressback;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//http://test.yuanqutech.com:8080/@tickmq?t=test&part=0&off=1790274
 public class MainActivity extends AppCompatActivity {
     String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private List<String> mPermissionList = new ArrayList<>();
