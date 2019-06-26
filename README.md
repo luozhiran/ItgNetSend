@@ -129,6 +129,6 @@ allprojects {
 	}
 
 	dependencies {
-    	         implementation 'com.github.luozhiran:ItgNetSend:0.0.1'
+    	         implementation 'com.github.luozhiran:ItgNetSend:0.0.11'
     	}
 ```
