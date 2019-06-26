@@ -53,7 +53,13 @@ public class MainActivity extends AppCompatActivity {
                 .itg()
                 .builder(ItgNetSend.POST)
                 .url("http://test.yuanqutech.com:8080/test")
+                .addParam("a", "a")
+                .addParam("b", "b")
+                .addParam("c", "c")
+                .addContent("fasdfasdfsadfasdfasdfasdfasdfsda", "application/json; charset=utf-8")
                 .addContent("fasdfasdfsdaf", "application/json; charset=utf-8")
+                .addContent("fasdfasdfsadfasdfasdfasfffffffffffffffffdfasdfsda", "application/json; charset=utf-8")
+                .addContent("fasdfasdfsadfasdfasdfaffffffffffffffffsdfasdfsda", "application/json; charset=utf-8")
                 .send(new ItgCallback() {
                     @Override
                     public void onFailure(String er) {

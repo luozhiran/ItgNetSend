@@ -116,7 +116,13 @@ public abstract class AdapterBuilder implements Builder {
 
 
     protected RequestBody getRequestBody() {
-        return getMultipartBody();
+        if (mContents != null && mContents.size() == 1 && mFiles == null) {
+            return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
+        } else if (mFiles != null && mFiles.size() == 0) {
+            return getUpdateFileRequestBody(mFiles.get(0));
+        } else {
+            return getMultipartBody();
+        }
     }
 
 
@@ -144,9 +150,16 @@ public abstract class AdapterBuilder implements Builder {
         return builder.build();
     }
 
-    private RequestBody getUpdateRequestBody() {
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, "fsdfsdfsdfsdfsdf");
+    private RequestBody getUpdateStringRequestBody(String mediaType, String content) {
+        MediaType mt = MediaType.parse(mediaType);
+        RequestBody body = RequestBody.create(mt, content);
+        return body;
+    }
+
+
+    private RequestBody getUpdateFileRequestBody(File file) {
+        MediaType mt = MediaType.parse("application/octet-stream");
+        RequestBody body = RequestBody.create(mt, file);
         return body;
     }
 
@@ -154,7 +167,7 @@ public abstract class AdapterBuilder implements Builder {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
-            String[] key_value = mParamSb.toString().split("//$");
+            String[] key_value = mParamSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -168,7 +181,7 @@ public abstract class AdapterBuilder implements Builder {
             for (String s : mContents) {
                 MediaType mediaType = MediaType.parse(mContentMediaTypes.get(count));
                 RequestBody requestBody = RequestBody.create(mediaType, s);
-                builder.addFormDataPart("file", "content" + count, requestBody);
+                builder.addFormDataPart("json", "", requestBody);
                 count++;
             }
         }
