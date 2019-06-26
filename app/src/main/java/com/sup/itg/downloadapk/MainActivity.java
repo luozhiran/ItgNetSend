@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         checkPermission();
     }
@@ -36,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendRequest(View view) {
         ItgNetSend.itg()
                 .builder(ItgNetSend.GET)
+                .url("http://https://github.com/luozhiran/ItgNetSend/new/master?readme=1")
                 .send(new ItgCallback() {
                     @Override
                     public void onFailure(String er) {
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).task();
         ItgNetSend.itg().itgDownlad().start(task);
-
     }
 
     public void testOnClock(View view) {

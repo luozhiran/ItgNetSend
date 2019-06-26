@@ -12,9 +12,9 @@ public class ItgDownload {
         mDispatchTool = new DispatchTool();
     }
 
-    public Task initTask() {
+    public ItgDownload initTask() {
         mTask = new Task();
-        return mTask;
+        return this;
     }
 
     public ItgDownload url(String url) {
@@ -88,7 +88,9 @@ public class ItgDownload {
         } else {
             mDispatchTool.download(task);
         }
+    }
 
-
+    public void cancel(String url) {
+        mDispatchTool.cancel(url);
     }
 }

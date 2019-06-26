@@ -46,7 +46,6 @@ public class ItgNetSend {
     }
 
     public ItgDownload itgDownlad() {
-        mItgDownload.initTask();
         return mItgDownload;
     }
 

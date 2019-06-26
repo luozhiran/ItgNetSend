@@ -134,7 +134,7 @@ public class DispatchTool implements Dispatch {
                 }
                 mItgHandler.sendEmptyMessage(1);
                 ItgLog.wtf(e.getMessage() + " " + task.url());
-                task.itgProgressback().fail(e.getMessage(),task.url());
+                task.itgProgressback().fail(e.getMessage(), task.url());
 
             }
 
@@ -149,7 +149,7 @@ public class DispatchTool implements Dispatch {
                             mRunningTasks.remove(task);
                         }
                         mItgHandler.sendEmptyMessage(1);
-                        task.itgProgressback().fail("append can not is true",task.url());
+                        task.itgProgressback().fail("append can not is true", task.url());
                         ItgLog.wtf("append can not is true" + "  " + task.url());
                     }
                 } else {
@@ -161,7 +161,7 @@ public class DispatchTool implements Dispatch {
                             mRunningTasks.remove(task);
                         }
                         mItgHandler.sendEmptyMessage(1);
-                        task.itgProgressback().fail("response.code() = " + response.code(),task.url());
+                        task.itgProgressback().fail("response.code() = " + response.code(), task.url());
                         ItgLog.wtf("response.code() = " + response.code() + "  " + task.url());
                     }
                 }
@@ -207,7 +207,7 @@ public class DispatchTool implements Dispatch {
                     }
                     mItgHandler.sendEmptyMessage(1);
                     ItgLog.wtf(e.getMessage() + " " + task.url());
-                    task.itgProgressback().fail(e.getMessage(),task.url());
+                    task.itgProgressback().fail(e.getMessage(), task.url());
 
                 }
 
@@ -225,7 +225,7 @@ public class DispatchTool implements Dispatch {
                             mRunningTasksUrl.remove(task.url());
                             mRunningTasks.remove(task);
                         }
-                        task.itgProgressback().fail("response.code() = " + response.code(),task.url());
+                        task.itgProgressback().fail("response.code() = " + response.code(), task.url());
                         ItgLog.wtf("response.code() = " + response.code() + "  " + task.url());
                         mItgHandler.sendEmptyMessage(1);
                     }
@@ -274,7 +274,7 @@ public class DispatchTool implements Dispatch {
                     synchronized (mLock) {
                         mRunningTasksUrl.remove(task.url());
                         mRunningTasks.remove(task);
-                        task.itgProgressback().fail("cancel download url",task.url());
+                        task.itgProgressback().fail("cancel download url", task.url());
                     }
                     return;
                 } else {
@@ -301,14 +301,14 @@ public class DispatchTool implements Dispatch {
                 mRunningTasksUrl.remove(task.url());
                 mRunningTasks.remove(task);
             }
-            task.itgProgressback().fail("not found file exception",task.url());
+            task.itgProgressback().fail("not found file exception", task.url());
         } catch (IOException e) {
             e.printStackTrace();
             synchronized (mLock) {
                 mRunningTasksUrl.remove(task.url());
                 mRunningTasks.remove(task);
             }
-            task.itgProgressback().fail("io exception",task.url());
+            task.itgProgressback().fail("io exception", task.url());
         } finally {
             try {
                 out.close();
@@ -320,7 +320,7 @@ public class DispatchTool implements Dispatch {
     }
 
 
-    private void cancel(String url) {
+    public void cancel(String url) {
         synchronized (mLock) {
             for (Task task : mRunningTasks) {
                 if (task.url().equals(url)) {
@@ -328,7 +328,14 @@ public class DispatchTool implements Dispatch {
                     break;
                 }
             }
+            for (Task task : mParamTasks) {
+                if (task.url().equals(url)) {
+                    task.cancel(url);
+                    break;
+                }
+            }
         }
+
     }
 
 }
