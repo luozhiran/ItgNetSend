@@ -338,4 +338,12 @@ public class DispatchTool implements Dispatch {
 
     }
 
+    public boolean isQueue(String url) {
+        if (mRunningTasksUrl.contains(url) || mParamTasksUrl.contains(url)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

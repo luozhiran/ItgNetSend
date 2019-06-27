@@ -35,21 +35,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendRequest(View view) {
-        ItgNetSend.itg()
-                .builder(ItgNetSend.GET)
-                .url("http://https://github.com/luozhiran/ItgNetSend/new/master?readme=1")
-                .send(new ItgCallback() {
-                    @Override
-                    public void onFailure(String er) {
-                        Log.e("dd", er);
-                    }
+//        ItgNetSend.itg()
+//                .builder(ItgNetSend.GET)
+//                .url("http://https://github.com/luozhiran/ItgNetSend/new/master?readme=1")
+//                .send(new ItgCallback() {
+//                    @Override
+//                    public void onFailure(String er) {
+//                        Log.e("dd", er);
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String result, int code) {
+//                        Log.e("dd", result);
+//                    }
+//
+//                });
 
-                    @Override
-                    public void onResponse(String result, int code) {
-                        Log.e("dd", result);
-                    }
-
-                });
     }
 
     public void download(View view) {

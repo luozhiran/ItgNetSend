@@ -90,6 +90,10 @@ public class ItgDownload {
         }
     }
 
+    public boolean isQueue(String url) {
+        return mDispatchTool.isQueue(url);
+    }
+
     public void cancel(String url) {
         mDispatchTool.cancel(url);
     }

@@ -5,7 +5,6 @@ import android.os.Handler;
 import java.io.File;
 
 import okhttp3.Callback;
-import okhttp3.Response;
 
 public interface Builder {
     Builder addParam(String key, String value);
