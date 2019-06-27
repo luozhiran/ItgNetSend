@@ -286,6 +286,7 @@ public class DispatchTool implements Dispatch {
                             task.itgProgressback().itgProgress(task);
                             synchronized (mLock) {
                                 mRunningTasks.remove(task);
+                                mRunningTasksUrl.remove(task.url());
                             }
                             mItgHandler.sendEmptyMessage(0);
                         } else {
