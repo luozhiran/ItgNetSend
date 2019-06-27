@@ -51,6 +51,29 @@ public class MainActivity extends AppCompatActivity {
 //
 //                });
 
+        ItgNetSend
+                .itg()
+                .builder(ItgNetSend.POST)
+                .url("http://robot.yuanqutech.com:8031/hh/tm")
+                .addParam("tid", "yq002")
+                .addParam("sdt", String.valueOf((System.currentTimeMillis() / 1000)))
+                .addParam("etk", "23")
+                .addParam("gid", String.valueOf("1"))
+                .addParam("qid", "123")
+                .addParam("sid", "1213")
+                .addParam("ans", "fasd")
+                .send(new ItgCallback() {
+                    @Override
+                    public void onFailure(String er) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String result, int code) {
+                        Log.e("math_err", result);
+                    }
+                });
+
     }
 
     public void download(View view) {
@@ -58,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 .itgDownlad()
                 .url("http://robot.yuanqutech.com:8030/ver/download?id=205")
                 .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")
+                .broadcastComponentName("")//
                 .append(true)
                 .callback(new ItgProgressback() {
                     @Override

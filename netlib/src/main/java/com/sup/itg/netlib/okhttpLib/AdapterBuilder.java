@@ -144,6 +144,8 @@ public abstract class AdapterBuilder implements Builder {
             return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
         } else if (mFiles != null && mFiles.size() == 0) {
             return getUpdateFileRequestBody(mFiles.get(0));
+        } else if (!TextUtils.isEmpty(mParamSb)&&mContents == null&&mFiles == null) {
+            return getFormBody();
         } else {
             return getMultipartBody();
         }
@@ -205,7 +207,7 @@ public abstract class AdapterBuilder implements Builder {
             for (String s : mContents) {
                 MediaType mediaType = MediaType.parse(mContentMediaTypes.get(count));
                 RequestBody requestBody = RequestBody.create(mediaType, s);
-                builder.addFormDataPart(mContentNames.get(count),null, requestBody);
+                builder.addFormDataPart(mContentNames.get(count), null, requestBody);
                 count++;
             }
         }
