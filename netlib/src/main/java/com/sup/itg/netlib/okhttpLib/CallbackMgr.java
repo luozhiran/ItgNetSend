@@ -31,6 +31,7 @@ public class CallbackMgr {
 
 
     public void switchItgProgressback(String oldUrl, String url) {
+        if (oldUrl.equals(url)) return;
         if (itgProgressbackMap != null && itgProgressbackMap.containsKey(oldUrl)) {
             ItgProgressback itgProgressback = itgProgressbackMap.get(oldUrl);
             itgProgressbackMap.remove(oldUrl);
