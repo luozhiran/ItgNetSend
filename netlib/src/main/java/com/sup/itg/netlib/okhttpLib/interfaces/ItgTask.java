@@ -13,4 +13,11 @@ public interface ItgTask {
 
     String url();
 
+    boolean broadcast();
+
+    String broadcastComponentName();
+
+    String path();
+
+    String md5();
 }

@@ -1,5 +1,11 @@
 package com.sup.itg.netlib.okhttpLib;
 
+import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.os.Build;
+import android.text.TextUtils;
+
 import com.sup.itg.netlib.ItgNetSend;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgProgressback;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgTask;
@@ -62,11 +68,22 @@ public class ItgDownload {
         return this;
     }
 
+    @SuppressLint("WrongConstant")
     public ItgDownload registerCallback() {
         this.task().itgProgressBack(new ItgProgressback() {
             @Override
             public void itgProgress(ItgTask task) {
                 ItgNetSend.itg().callbackMgr().loop(task);
+                if (task.getProgress() == 100 && task.broadcast()) {
+                    Intent intent = new Intent(ItgNetSend.BROAD_ACTION);
+                    if (Build.VERSION.SDK_INT >= 26 && !TextUtils.isEmpty(task.broadcastComponentName())) {
+                        intent.addFlags(0x01000000);//加上这句话，可以解决在android8.0系统以上2个module之间发送广播接收不到的问题
+                        intent.setComponent(new ComponentName(ItgNetSend.itg().itgSet().mContext.getPackageName(), task.broadcastComponentName()));
+                    }
+                    intent.putExtra("url", task.url());
+                    intent.putExtra("file", task.path());
+                    ItgNetSend.itg().itgSet().mContext.sendBroadcast(intent);
+                }
             }
 
             @Override
@@ -74,6 +91,15 @@ public class ItgDownload {
                 ItgNetSend.itg().callbackMgr().loopFail(error, url);
             }
         });
+        return this;
+    }
+
+    public ItgDownload broadcast(boolean broad) {
+        if (mTask == null) {
+            new NullPointerException("invoke initTask");
+            return null;
+        }
+        mTask.broadcast(broad);
         return this;
     }
 

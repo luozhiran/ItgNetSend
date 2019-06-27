@@ -20,6 +20,8 @@ public class Task implements ItgTask {
     private long rDownloadSize;
     private String rCancelUrl;
     private boolean tAppend;
+    private boolean tBroad;
+    private String tComponentName;
 
 
     public HashMap<String, String> params() {
@@ -56,10 +58,30 @@ public class Task implements ItgTask {
         return tUrl;
     }
 
+
+    public void broadcast(boolean broad) {
+        tBroad = broad;
+    }
+
+    @Override
+    public boolean broadcast() {
+        return tBroad;
+    }
+
+    public void broadcastComponentName(String componentName) {
+        tComponentName = componentName;
+    }
+
+    @Override
+    public String broadcastComponentName() {
+        return tComponentName;
+    }
+
     public String md5() {
         return tMd5;
     }
 
+    @Override
     public String path() {
         return tPath;
     }

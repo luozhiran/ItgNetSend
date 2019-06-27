@@ -11,6 +11,7 @@ public class ItgNetSend {
     public static final int POST = 2;
     public static final String MEDIA_JSON = "application/json; charset=utf-8";
     public static final String MEDIA_OCTET_STREAM = "application/octet-stream";
+    public static final String BROAD_ACTION = "itg.download_complete_broad";
 
     private static volatile ItgNetSend itgNetSend;
     private OkhttpMgr mOkhttpMgr;
