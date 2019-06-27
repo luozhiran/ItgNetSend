@@ -49,13 +49,15 @@ public class CallbackMgr {
             mItgProgressbacks = new ArrayList<>();
         }
         synchronized (mLock) {
-            mItgProgressbacks.add(progressback);
+            if (!mItgProgressbacks.contains(progressback)) {
+                mItgProgressbacks.add(progressback);
+            }
         }
     }
 
     public void removeItgProgress1(ItgProgressback progressback) {
         synchronized (mLock) {
-            if (mItgProgressbacks == null) {
+            if (mItgProgressbacks != null) {
                 mItgProgressbacks.remove(progressback);
             }
         }
