@@ -271,6 +271,7 @@ public class DispatchTool implements Dispatch {
                 cur = task.getProgress();
                 if (!TextUtils.isEmpty(task.cancel()) && task.url().equals(task.cancel())) {
                     ItgLog.wtf("cancel " + task.url());
+                    new File(task.path() + ".tmp").delete();
                     synchronized (mLock) {
                         mRunningTasksUrl.remove(task.url());
                         mRunningTasks.remove(task);
