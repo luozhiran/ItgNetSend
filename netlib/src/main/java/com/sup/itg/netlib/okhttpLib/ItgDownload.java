@@ -103,6 +103,15 @@ public class ItgDownload {
         return this;
     }
 
+    public ItgDownload broadcastComponentName(String componentName) {
+        if (mTask == null) {
+            new NullPointerException("invoke initTask");
+            return null;
+        }
+        mTask.broadcastComponentName(componentName);
+        return this;
+    }
+
 
     public Task task() {
         return mTask;
