@@ -22,5 +22,7 @@ public interface Builder {
 
     Builder addFile(File file);
 
-    Builder addContent(String content,String mediaType);
+    Builder addContent(String content, String mediaType);
+
+    Builder addContent(String content, String contentFlag, String mediaType);
 }

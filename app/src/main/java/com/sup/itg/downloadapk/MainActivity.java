@@ -18,8 +18,10 @@ import com.sup.itg.netlib.okhttpLib.interfaces.ItgCallback;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgTask;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgProgressback;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 //http://test.yuanqutech.com:8080/@tickmq?t=test&part=0&off=1790274
 public class MainActivity extends AppCompatActivity {
     String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -33,46 +35,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendRequest(View view) {
-//        ItgNetSend.itg()
-//                .builder(ItgNetSend.GET)
-//                .url("http://https://github.com/luozhiran/ItgNetSend/new/master?readme=1")
-//                .send(new ItgCallback() {
-//                    @Override
-//                    public void onFailure(String er) {
-//                        Log.e("dd", er);
-//                    }
-//
-//                    @Override
-//                    public void onResponse(String result, int code) {
-//                        Log.e("dd", result);
-//                    }
-//
-//                });
-
-        ItgNetSend
-                .itg()
-                .builder(ItgNetSend.POST)
-                .url("http://test.yuanqutech.com:8080/test")
-                .addParam("a", "a")
-                .addParam("b", "b")
-                .addParam("c", "c")
-                .addContent("fasdfasdfsadfasdfasdfasdfasdfsda", "application/json; charset=utf-8")
-                .addContent("fasdfasdfsdaf", "application/json; charset=utf-8")
-                .addContent("fasdfasdfsadfasdfasdfasfffffffffffffffffdfasdfsda", "application/json; charset=utf-8")
-                .addContent("fasdfasdfsadfasdfasdfaffffffffffffffffsdfasdfsda", "application/json; charset=utf-8")
+        ItgNetSend.itg()
+                .builder(ItgNetSend.GET)
+                .url("http://https://github.com/luozhiran/ItgNetSend/new/master?readme=1")
                 .send(new ItgCallback() {
                     @Override
                     public void onFailure(String er) {
-
+                        Log.e("dd", er);
                     }
 
                     @Override
                     public void onResponse(String result, int code) {
-
+                        Log.e("dd", result);
                     }
+
                 });
-
-
     }
 
     public void download(View view) {

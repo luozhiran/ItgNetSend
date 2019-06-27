@@ -12,7 +12,9 @@ import com.sup.itg.netlib.okhttpLib.interfaces.ItgCallback;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,6 +34,7 @@ public abstract class AdapterBuilder implements Builder {
     protected List<File> mFiles;
     protected List<String> mContents;
     protected List<String> mContentMediaTypes;
+    protected List<String> mContentNames;
 
     public AdapterBuilder(OkHttpClient okHttpClient) {
         mOkHttpClient = okHttpClient;
@@ -56,6 +59,20 @@ public abstract class AdapterBuilder implements Builder {
         return this;
     }
 
+
+    private void initList() {
+        if (mContentNames == null) {
+            mContentNames = new ArrayList<>();
+        }
+
+        if (mContents == null) {
+            mContents = new ArrayList<>();
+        }
+        if (mContentMediaTypes == null) {
+            mContentMediaTypes = new ArrayList<>();
+        }
+    }
+
     @Override
     public Builder addFile(File file) {
         if (mFiles == null) {
@@ -69,21 +86,28 @@ public abstract class AdapterBuilder implements Builder {
 
     @Override
     public Builder addContent(String content, String mediaType) {
-        if (mContents == null) {
-            mContents = new ArrayList<>();
-        }
-        if (mContentMediaTypes == null) {
-            mContentMediaTypes = new ArrayList<>();
-        }
+        initList();
         mContents.add(content);
-        mContentMediaTypes.add(content);
+        mContentNames.add("");
+        mContentMediaTypes.add(mediaType);
         return this;
     }
+
+
+    @Override
+    public Builder addContent(String content, String contentFlag, String mediaType) {
+        initList();
+        mContents.add(content);
+        mContentNames.add(contentFlag);
+        mContentMediaTypes.add(mediaType);
+        return this;
+    }
+
 
     protected Headers getHeader() {
         if (!TextUtils.isEmpty(mHeaderSb) && mHeaderSb.length() > 0) {
             Headers.Builder builder = new Headers.Builder();
-            String[] key_value = mHeaderSb.toString().split("\\$");
+            String[] key_value = mHeaderSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return null;
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -99,7 +123,7 @@ public abstract class AdapterBuilder implements Builder {
     protected String getParam() {
         if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
             Uri.Builder urlBuild = Uri.parse(mUrl).buildUpon();
-            String[] key_value = mParamSb.toString().split("//$");
+            String[] key_value = mParamSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return mUrl;
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -138,7 +162,7 @@ public abstract class AdapterBuilder implements Builder {
     private FormBody getFormBody() {
         FormBody.Builder builder = new FormBody.Builder();
         if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
-            String[] key_value = mParamSb.toString().split("//$");
+            String[] key_value = mParamSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -181,7 +205,7 @@ public abstract class AdapterBuilder implements Builder {
             for (String s : mContents) {
                 MediaType mediaType = MediaType.parse(mContentMediaTypes.get(count));
                 RequestBody requestBody = RequestBody.create(mediaType, s);
-                builder.addFormDataPart("json", "", requestBody);
+                builder.addFormDataPart(mContentNames.get(count),null, requestBody);
                 count++;
             }
         }
