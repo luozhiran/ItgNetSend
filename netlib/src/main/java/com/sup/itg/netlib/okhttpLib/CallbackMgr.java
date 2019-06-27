@@ -2,6 +2,7 @@ package com.sup.itg.netlib.okhttpLib;
 
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgProgressback;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgTask;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,6 +28,16 @@ public class CallbackMgr {
             itgProgressbackMap.remove(url);
         }
     }
+
+
+    public void switchItgProgressback(String oldUrl, String url) {
+        if (itgProgressbackMap != null && itgProgressbackMap.containsKey(oldUrl)) {
+            ItgProgressback itgProgressback = itgProgressbackMap.get(oldUrl);
+            itgProgressbackMap.remove(oldUrl);
+            itgProgressbackMap.put(url, itgProgressback);
+        }
+    }
+
 
     public void loop(ItgTask task) {
         if (itgProgressbackMap != null) {
