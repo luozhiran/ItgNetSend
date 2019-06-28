@@ -13,6 +13,8 @@ public class ItgSet {
     protected Context mContext;
     protected String mItgUrl;
     protected String mLogPath;
+    protected int MAX_DOWNLOAD_NUM = 3;
+
     private Handler mHandler;
 
 
@@ -66,6 +68,11 @@ public class ItgSet {
 
     public ItgSet log(String path) {
         mLogPath = path;
+        return this;
+    }
+
+    public ItgSet downloadQueueMaxNum(int num) {
+        MAX_DOWNLOAD_NUM = num;
         return this;
     }
 

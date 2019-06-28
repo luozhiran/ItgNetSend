@@ -35,7 +35,6 @@ public class DispatchTool implements Dispatch {
     private List<String> mRunningTasksUrl = new ArrayList<>();
 
     private Object mLock = new Object();
-    private final int MAX_DOWNLOAD_NUM = 3;
     private volatile Looper mItgLooper;
     private volatile ItgHandler mItgHandler;
 
@@ -48,7 +47,7 @@ public class DispatchTool implements Dispatch {
         public void handleMessage(Message msg) {
             Task task = null;
             synchronized (mLock) {
-                if (mParamTasks.size() > 0 && mRunningTasks.size() <= MAX_DOWNLOAD_NUM) {
+                if (mParamTasks.size() > 0 && mRunningTasks.size() <= ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
                     task = mParamTasks.remove(mParamTasks.size() - 1);
                     mParamTasksUrl.remove(mParamTasks.size() - 1);
                     if (task != null) {
@@ -79,7 +78,7 @@ public class DispatchTool implements Dispatch {
             }
             if (!mParamTasksUrl.contains(task.url())) {
                 if (!mRunningTasksUrl.contains(task.url())) {
-                    if (mRunningTasks.size() <= MAX_DOWNLOAD_NUM) {
+                    if (mRunningTasks.size() <= ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
                         mRunningTasks.add(task);
                         mRunningTasksUrl.add(task.url());
                         return true;
@@ -93,7 +92,7 @@ public class DispatchTool implements Dispatch {
                 }
             } else {
                 if (!mRunningTasks.contains(task)) {
-                    if (mRunningTasks.size() <= MAX_DOWNLOAD_NUM) {
+                    if (mRunningTasks.size() <= ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
                         mParamTasksUrl.remove(task.url());
                         mParamTasks.remove(task);
                         mRunningTasksUrl.add(task.url());

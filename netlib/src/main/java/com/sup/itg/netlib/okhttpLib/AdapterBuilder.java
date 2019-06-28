@@ -32,6 +32,9 @@ public abstract class AdapterBuilder implements Builder {
     protected StringBuilder mHeaderSb = new StringBuilder();
     protected StringBuilder mParamSb = new StringBuilder();
     protected List<File> mFiles;
+    protected List<String> mFileNames;
+    protected List<String> mFileMediaTypes;
+
     protected List<String> mContents;
     protected List<String> mContentMediaTypes;
     protected List<String> mContentNames;
@@ -75,13 +78,48 @@ public abstract class AdapterBuilder implements Builder {
 
     @Override
     public Builder addFile(File file) {
+        initFile();
+        if (file != null) {
+            mFiles.add(file);
+            mFileNames.add("file");
+            mFileMediaTypes.add("");
+        }
+        return this;
+    }
+
+
+    @Override
+    public Builder addFile(String name, File file) {
+        initFile();
+        if (file != null) {
+            mFiles.add(file);
+            mFileMediaTypes.add("");
+            mFileNames.add(name);
+        }
+        return this;
+    }
+
+    @Override
+    public Builder addFile(String name, String mediaType, File file) {
+        initFile();
+        if (file != null) {
+            mFiles.add(file);
+            mFileMediaTypes.add(mediaType);
+            mFileNames.add(name);
+        }
+        return this;
+    }
+
+    private void initFile() {
         if (mFiles == null) {
             mFiles = new ArrayList<>();
         }
-        if (file != null) {
-            mFiles.add(file);
+        if (mFileNames == null) {
+            mFileNames = new ArrayList<>();
         }
-        return this;
+        if (mFileMediaTypes == null) {
+            mFileMediaTypes = new ArrayList<>();
+        }
     }
 
     @Override
@@ -144,7 +182,7 @@ public abstract class AdapterBuilder implements Builder {
             return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
         } else if (mFiles != null && mFiles.size() == 0) {
             return getUpdateFileRequestBody(mFiles.get(0));
-        } else if (!TextUtils.isEmpty(mParamSb)&&mContents == null&&mFiles == null) {
+        } else if (!TextUtils.isEmpty(mParamSb) && mContents == null && mFiles == null) {
             return getFormBody();
         } else {
             return getMultipartBody();
@@ -153,8 +191,10 @@ public abstract class AdapterBuilder implements Builder {
 
 
     public MediaType getFileType(String fileName) {
-        if (fileName.endsWith(".png") || fileName.endsWith(".jpg")) {
-            return MediaType.parse("image/jpg");
+        if (fileName.endsWith(".png")) {
+            return MediaType.parse("image/png");
+        } else if (fileName.endsWith(".jpg")) {
+            return MediaType.parse("image/jpeg");
         } else {
             return null;
         }
@@ -211,10 +251,13 @@ public abstract class AdapterBuilder implements Builder {
                 count++;
             }
         }
+
         if (mFiles != null) {
+            int count = 0;
             for (File file : mFiles) {
-                RequestBody fileBody = RequestBody.create(getFileType(file.getName()), file);
-                builder.addFormDataPart("file", file.getName(), fileBody);
+                RequestBody fileBody = RequestBody.create(TextUtils.isEmpty(mFileMediaTypes.get(count)) ? getFileType(file.getName()) : MediaType.parse(mFileMediaTypes.get(count)), file);
+                builder.addFormDataPart(mFileNames.get(count), file.getName(), fileBody);
+                count++;
             }
         }
         return builder.build();
