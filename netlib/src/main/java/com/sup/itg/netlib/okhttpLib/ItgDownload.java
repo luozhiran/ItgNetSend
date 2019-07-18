@@ -75,14 +75,12 @@ public class ItgDownload {
             public void itgProgress(ItgTask task) {
                 ItgNetSend.itg().callbackMgr().loop(task);
                 if (task.getProgress() == 100 && task.broadcast()) {
-//                    Intent intent = new Intent(ItgNetSend.BROAD_ACTION);
-                    Intent intent = new Intent("sasass");
-//                    if (Build.VERSION.SDK_INT >= 26 && !TextUtils.isEmpty(task.broadcastComponentName())) {
-//                        intent.addFlags(0x01000000);//加上这句话，可以解决在android8.0系统以上2个module之间发送广播接收不到的问题
-//                        intent.setComponent(new ComponentName(ItgNetSend.itg().itgSet().mContext.getPackageName(), task.broadcastComponentName()));
-//                    }
-                    intent.addFlags(0x01000000);//加上这句话，可以解决在android8.0系统以上2个module之间发送广播接收不到的问题
-                    intent.setComponent(new ComponentName(ItgNetSend.itg().itgSet().mContext.getPackageName(), task.broadcastComponentName()));
+                    Intent intent = new Intent(ItgNetSend.BROAD_ACTION);
+                    if (Build.VERSION.SDK_INT >= 26 && !TextUtils.isEmpty(task.broadcastComponentName())) {
+                        intent.addFlags(0x01000000);//加上这句话，可以解决在android8.0系统以上2个module之间发送广播接收不到的问题
+                        intent.setComponent(new ComponentName(ItgNetSend.itg().itgSet().mContext.getPackageName(), task.broadcastComponentName()));
+                    }
+
                     intent.putExtra("url", task.url());
                     intent.putExtra("file", task.path());
                     ItgNetSend.itg().itgSet().mContext.sendBroadcast(intent);
