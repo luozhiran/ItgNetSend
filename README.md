@@ -191,6 +191,8 @@ Task task = ItgNetSend.itg()
             .url("http://robot.yuanqutech.com:8030/ver/download?id=205")//设置下载地址
             .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")//下载数据保存路径
             .append(true)//启用断点续传(支持断点续传，不然会下载失败)
+            .broadcast(true)//现在完成后，调用完成广播
+            .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
             .callback(new ItgProgressback() {
                 @Override
                 public void itgProgress(ItgTask task) {
@@ -242,6 +244,20 @@ ItgNetSend.itg().callbackMgr().removeItgProgress("http://robot.yuanqutech.com:80
 
 ```
 
+> 接受下载完成的广播
+
+```
+   <receiver
+            android:name=".common.broadcast.ApkInstallBroadcast"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.yqtec.install.broadcast" />
+            </intent-filter>
+        </receiver>
+
+```
+
 ```
 allprojects {
 		repositories {
@@ -251,7 +267,7 @@ allprojects {
 	}
 
 dependencies {
-    	implementation 'com.github.luozhiran:ItgNetSend:1.0.0'
+    	implementation 'com.github.luozhiran:ItgNetSend:1.0.1'
     	 implementation 'com.squareup.okhttp3:okhttp:3.14.2'
 }
 ```
