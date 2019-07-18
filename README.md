@@ -216,6 +216,8 @@ Task task = ItgNetSend.itg()
             .url("http://robot.yuanqutech.com:8030/ver/download?id=205")//设置下载地址
             .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")//下载数据保存路径
             .append(true)//启用断点续传(支持断点续传，不然会下载失败)
+	    .broadcast(true)//现在完成后，调用完成广播
+            .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
             .registerCallback()//设置可恢复监听
             .task();
 
@@ -244,7 +246,7 @@ ItgNetSend.itg().callbackMgr().removeItgProgress("http://robot.yuanqutech.com:80
 
 ```
 
-> 接受下载完成的广播
+> 如果创建下载任务时，启用广播，则下载完成后，后启用下面广播(action不能修改)
 
 ```
    <receiver
