@@ -251,7 +251,7 @@ allprojects {
 	}
 
 dependencies {
-    	implementation 'com.github.luozhiran:ItgNetSend:0.0.2'
+    	implementation 'com.github.luozhiran:ItgNetSend:1.0.0'
     	 implementation 'com.squareup.okhttp3:okhttp:3.14.2'
 }
 ```
