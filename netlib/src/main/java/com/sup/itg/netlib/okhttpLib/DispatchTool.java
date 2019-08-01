@@ -113,6 +113,7 @@ public class DispatchTool implements Dispatch {
 
     @Override
     public void download(Task task) {
+        task.itgProgressback().connecting(task);
         if (isDownload(task)) {
             sendDownloadRequest(task, null);
         } else {
@@ -197,6 +198,7 @@ public class DispatchTool implements Dispatch {
     @Override
     public void appendDownload(final Task task) {
         if (isDownload(task)) {
+            task.itgProgressback().connecting(task);
             getBuilder(task, null).send(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {

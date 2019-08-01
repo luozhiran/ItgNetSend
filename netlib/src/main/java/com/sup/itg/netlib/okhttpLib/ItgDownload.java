@@ -72,6 +72,11 @@ public class ItgDownload {
     public ItgDownload registerCallback() {
         this.task().itgProgressBack(new ItgProgressback() {
             @Override
+            public void connecting(ItgTask task) {
+                ItgNetSend.itg().callbackMgr().loopConnecting(task);
+            }
+
+            @Override
             public void itgProgress(ItgTask task) {
                 ItgNetSend.itg().callbackMgr().loop(task);
                 if (task.getProgress() == 100 && task.broadcast()) {

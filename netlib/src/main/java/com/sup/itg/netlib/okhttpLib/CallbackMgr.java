@@ -64,6 +64,21 @@ public class CallbackMgr {
 
     }
 
+    public void loopConnecting(ItgTask task) {
+        if (itgProgressbackMap != null) {
+            ItgProgressback itgProgressback = itgProgressbackMap.get(task.url());
+            if (itgProgressback != null) {
+                itgProgressback.connecting(task);
+            }
+        }
+        synchronized (mLock) {
+            if (mItgProgressbacks != null) {
+                for (ItgProgressback itgProgressback : mItgProgressbacks) {
+                    itgProgressback.connecting(task);
+                }
+            }
+        }
+    }
 
     public void loop(ItgTask task) {
         if (itgProgressbackMap != null) {
