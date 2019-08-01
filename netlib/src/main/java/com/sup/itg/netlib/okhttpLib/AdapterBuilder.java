@@ -19,6 +19,7 @@ import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -42,6 +43,7 @@ public abstract class AdapterBuilder implements Builder {
 
     protected long mIntervalOffset;
     protected File mIntervalFile;
+    protected String mCookies;
 
     public AdapterBuilder(OkHttpClient okHttpClient) {
         mOkHttpClient = okHttpClient;
@@ -153,21 +155,60 @@ public abstract class AdapterBuilder implements Builder {
         return this;
     }
 
+    @Override
+    public Builder addCookie(Cookie cookie) {
+        if (cookie != null) {
+            StringBuilder cookieHeader = new StringBuilder();
+            cookieHeader.append(cookie.name()).append('=').append(cookie.value());
+            mCookies = cookieHeader.toString();
+        }
+        return this;
+    }
+
+    @Override
+    public Builder addCookie(List<Cookie> cookies) {
+        if (cookies == null || cookies.size() == 0) return this;
+        StringBuilder cookieHeader = new StringBuilder();
+        for (int i = 0, size = cookies.size(); i < size; i++) {
+            if (i > 0) {
+                cookieHeader.append("; ");
+            }
+            Cookie cookie = cookies.get(i);
+            cookieHeader.append(cookie.name()).append('=').append(cookie.value());
+        }
+        mCookies = cookieHeader.toString();
+        return this;
+    }
 
     protected Headers getHeader() {
-        if (!TextUtils.isEmpty(mHeaderSb) && mHeaderSb.length() > 0) {
-            Headers.Builder builder = new Headers.Builder();
-            String[] key_value = mHeaderSb.toString().split("[$]");
-            if (key_value == null || key_value.length == 0) return null;
-            for (String value : key_value) {
-                String[] s = value.split("#");
-                if (s != null && s.length == 2) {
-                    builder.add(s[0], s[1]);
+        boolean head = !TextUtils.isEmpty(mHeaderSb) && mHeaderSb.length() > 0;
+        boolean cookie = !TextUtils.isEmpty(mCookies) && mCookies.length() > 0;
+        Headers.Builder builder = null;
+        if (head || cookie) {
+            builder = new Headers.Builder();
+        }
+        if (builder == null) {
+            return null;
+        } else {
+            if (head) {
+                String[] key_value = mHeaderSb.toString().split("[$]");
+                if (key_value == null || key_value.length == 0) {
+
+                } else {
+                    for (String value : key_value) {
+                        String[] s = value.split("#");
+                        if (s != null && s.length == 2) {
+                            builder.add(s[0], s[1]);
+                        }
+                    }
                 }
+            }
+            if (cookie) {
+                builder.add("Cookie", mCookies);
             }
             return builder.build();
         }
-        return null;
+
     }
 
     protected String getParam() {

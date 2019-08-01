@@ -3,8 +3,10 @@ package com.sup.itg.netlib.okhttpLib.interfaces;
 import android.os.Handler;
 
 import java.io.File;
+import java.util.List;
 
 import okhttp3.Callback;
+import okhttp3.Cookie;
 
 public interface Builder {
     Builder addParam(String key, String value);
@@ -30,4 +32,8 @@ public interface Builder {
     Builder addContent(String content, String contentFlag, String mediaType);
 
     Builder addInterva(File file, long offset);
+
+    Builder addCookie(Cookie cookie);
+
+    Builder addCookie(List<Cookie> cookie);
 }
