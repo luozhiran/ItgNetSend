@@ -1,11 +1,13 @@
 package com.sup.itg.netlib;
 
 import com.sup.itg.netlib.okhttpLib.AdapterBuilder;
+import com.sup.itg.netlib.okhttpLib.DeleteBuilder;
 import com.sup.itg.netlib.okhttpLib.GetBuilder;
 import com.sup.itg.netlib.okhttpLib.PostBuilder;
 
 import okhttp3.OkHttpClient;
 
+import static com.sup.itg.netlib.ItgNetSend.DELETE;
 import static com.sup.itg.netlib.ItgNetSend.GET;
 import static com.sup.itg.netlib.ItgNetSend.POST;
 
@@ -19,6 +21,9 @@ public class RequestFactory {
                 break;
             case POST:
                 adapterBuilder = new PostBuilder(okHttpClient);
+                break;
+            case DELETE:
+                adapterBuilder = new DeleteBuilder(okHttpClient);
                 break;
         }
 
