@@ -176,6 +176,23 @@ public class App extends Application {
                     }
                 });
 ```
+#### ItgNetSend 特殊文件上传，从文件的中间某个位置开始上传，使用此功能是其他上传功能失效（也就是说只能单独使用）
+    ItgNetSend
+              .itg()
+              .builder(ItgNetSend.POST)
+              .url("http://test.yuanqutech.com:8080/test")
+              .addInterva(new File(())，20)
+              .send(new ItgCallback() {
+                  @Override
+                  public void onFailure(String er) {
+                     ItgLog.e(er);
+                  }
+
+                  @Override
+                  public void onResponse(String result, int code) {
+                      ItgLog.e(result);
+                  }
+                });
 
    #### ItgNetSend 下载apk，zip，txt文件
 
@@ -194,6 +211,11 @@ Task task = ItgNetSend.itg()
             .broadcast(true)//现在完成后，调用完成广播
             .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
             .callback(new ItgProgressback() {
+                @Override
+                public void connecting(ItgTask task) {
+                       
+                }
+                
                 @Override
                 public void itgProgress(ItgTask task) {
                 }
@@ -216,7 +238,7 @@ Task task = ItgNetSend.itg()
             .url("http://robot.yuanqutech.com:8030/ver/download?id=205")//设置下载地址
             .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")//下载数据保存路径
             .append(true)//启用断点续传(支持断点续传，不然会下载失败)
-	    .broadcast(true)//现在完成后，调用完成广播
+	        .broadcast(true)//现在完成后，调用完成广播
             .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
             .registerCallback()//设置可恢复监听
             .task();
@@ -228,6 +250,11 @@ ItgNetSend
          .itg()
          .callbackMgr()
          .addItgProgress("http://robot.yuanqutech.com:8030/ver/download?id=205", new ItgProgressback() {
+         
+           @Override
+            public void connecting(ItgTask task) {
+           
+            }
 
             @Override
             public void itgProgress(ItgTask task) {
@@ -269,7 +296,7 @@ allprojects {
 	}
 
 dependencies {
-    	implementation 'com.github.luozhiran:ItgNetSend:1.0.3'
+    	implementation 'com.github.luozhiran:ItgNetSend:1.0.4'
     	 implementation 'com.squareup.okhttp3:okhttp:3.14.2'
 }
 ```

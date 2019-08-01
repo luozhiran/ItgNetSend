@@ -23,9 +23,11 @@ public interface Builder {
 
     Builder addFile(String fileName, File file);
 
-    Builder addFile(String fileName, String mediaType,File file);
+    Builder addFile(String fileName, String mediaType, File file);
 
     Builder addContent(String content, String mediaType);
 
     Builder addContent(String content, String contentFlag, String mediaType);
+
+    Builder addInterva(File file, long offset);
 }

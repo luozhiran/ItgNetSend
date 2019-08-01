@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.sup.itg.netlib.IntervalBody;
 import com.sup.itg.netlib.ItgNetSend;
 import com.sup.itg.netlib.okhttpLib.interfaces.Builder;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgCallback;
@@ -38,6 +39,9 @@ public abstract class AdapterBuilder implements Builder {
     protected List<String> mContents;
     protected List<String> mContentMediaTypes;
     protected List<String> mContentNames;
+
+    protected long mIntervalOffset;
+    protected File mIntervalFile;
 
     public AdapterBuilder(OkHttpClient okHttpClient) {
         mOkHttpClient = okHttpClient;
@@ -122,6 +126,14 @@ public abstract class AdapterBuilder implements Builder {
         }
     }
 
+
+    @Override
+    public Builder addInterva(File file, long offset) {
+        mIntervalFile = file;
+        mIntervalOffset = offset;
+        return null;
+    }
+
     @Override
     public Builder addContent(String content, String mediaType) {
         initList();
@@ -178,14 +190,18 @@ public abstract class AdapterBuilder implements Builder {
 
 
     protected RequestBody getRequestBody() {
-        if (mContents != null && mContents.size() == 1 && mFiles == null) {
-            return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
-        } else if (mFiles != null && mFiles.size() == 1) {
-            return getUpdateFileRequestBody(mFiles.get(0));
-        } else if (!TextUtils.isEmpty(mParamSb) && mContents == null && mFiles == null) {
-            return getFormBody();
+        if (mIntervalFile != null) {
+            return getIntervalBody();
         } else {
-            return getMultipartBody();
+            if (mContents != null && mContents.size() == 1 && mFiles == null) {
+                return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
+            } else if (mFiles != null && mFiles.size() == 1) {
+                return getUpdateFileRequestBody(mFiles.get(0));
+            } else if (!TextUtils.isEmpty(mParamSb) && mContents == null && mFiles == null) {
+                return getFormBody();
+            } else {
+                return getMultipartBody();
+            }
         }
     }
 
@@ -198,6 +214,13 @@ public abstract class AdapterBuilder implements Builder {
         } else {
             return null;
         }
+    }
+
+    private IntervalBody getIntervalBody() {
+        IntervalBody.Builder builder = new IntervalBody.Builder();
+        builder.addFile(mIntervalFile);
+        builder.addFileOffset(mIntervalOffset);
+        return builder.build();
     }
 
 
