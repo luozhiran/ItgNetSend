@@ -20,4 +20,7 @@ public interface ItgTask {
     String path();
 
     String md5();
+
+
+    String customBroadcast();
 }

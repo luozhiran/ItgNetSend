@@ -22,6 +22,7 @@ public class Task implements ItgTask {
     private boolean tAppend;
     private boolean tBroad;
     private String tComponentName;
+    private String tCostomBroadcast;
 
 
     public HashMap<String, String> params() {
@@ -79,6 +80,16 @@ public class Task implements ItgTask {
 
     public String md5() {
         return tMd5;
+    }
+
+
+    public void customBroadcast(String action) {
+        tCostomBroadcast = action;
+    }
+
+    @Override
+    public String customBroadcast() {
+        return tCostomBroadcast;
     }
 
     @Override
