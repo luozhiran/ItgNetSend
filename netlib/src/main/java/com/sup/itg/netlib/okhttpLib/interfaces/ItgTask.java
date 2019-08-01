@@ -5,7 +5,7 @@ public interface ItgTask {
 
     int getProgress();
 
-    float getDownloadSize();
+    long getDownloadSize();
 
     long getContentLength();
 

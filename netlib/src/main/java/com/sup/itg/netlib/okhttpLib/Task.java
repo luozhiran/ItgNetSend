@@ -118,7 +118,7 @@ public class Task implements ItgTask {
     }
 
     @Override
-    public float getDownloadSize() {
+    public long getDownloadSize() {
         return rDownloadSize;
     }
 
