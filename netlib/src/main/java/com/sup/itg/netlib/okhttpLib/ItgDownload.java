@@ -32,6 +32,14 @@ public class ItgDownload {
         return this;
     }
 
+    public ItgDownload customBroadcast(String action) {
+        if (mTask == null) {
+            new NullPointerException("invoke initTask");
+        }
+        mTask.customBroadcast(action);
+        return this;
+    }
+
     public ItgDownload path(String path) {
         if (mTask == null) {
             new NullPointerException("invoke initTask");
