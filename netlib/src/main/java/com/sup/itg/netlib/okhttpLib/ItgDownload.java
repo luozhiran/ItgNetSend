@@ -110,6 +110,7 @@ public class ItgDownload {
                     }
                     intent.putExtra("url", task.url());
                     intent.putExtra("file", task.path());
+                    intent.putExtra("extra",task.extra());
                     ItgNetSend.itg().itgSet().mContext.sendBroadcast(intent);
                 }
             }
