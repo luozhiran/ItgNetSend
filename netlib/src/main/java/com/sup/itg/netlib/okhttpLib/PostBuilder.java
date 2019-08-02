@@ -20,7 +20,7 @@ public class PostBuilder extends AdapterBuilder {
         }
         builder.tag(mUrl);
         builder.url(mUrl);
-        builder.delete(getRequestBody());
+        builder.post(getRequestBody());
         Call call = mOkHttpClient.newCall(builder.build());
         return call;
     }
