@@ -67,6 +67,14 @@ public class ItgDownload {
         return this;
     }
 
+    public ItgDownload extra(String extra) {
+        if (mTask == null) {
+            new NullPointerException("invoke initTask");
+        }
+        mTask.extra(extra);
+        return this;
+    }
+
     public ItgDownload callback(ItgProgressback progressback) {
         if (mTask == null) {
             new NullPointerException("invoke initTask");

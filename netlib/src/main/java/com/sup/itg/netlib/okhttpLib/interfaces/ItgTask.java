@@ -21,6 +21,7 @@ public interface ItgTask {
 
     String md5();
 
-
     String customBroadcast();
+
+    String extra();
 }

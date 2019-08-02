@@ -23,6 +23,7 @@ public class Task implements ItgTask {
     private boolean tBroad;
     private String tComponentName;
     private String tCostomBroadcast;
+    private String tExtra;
 
 
     public HashMap<String, String> params() {
@@ -90,6 +91,15 @@ public class Task implements ItgTask {
     @Override
     public String customBroadcast() {
         return tCostomBroadcast;
+    }
+
+    @Override
+    public String extra() {
+        return tExtra;
+    }
+
+    public void extra(String extra) {
+        tExtra = extra;
     }
 
     @Override
