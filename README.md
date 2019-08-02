@@ -209,6 +209,7 @@ Task task = ItgNetSend.itg()
             .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")//下载数据保存路径
             .append(true)//启用断点续传(支持断点续传，不然会下载失败)
             .broadcast(true)//现在完成后，调用完成广播
+            .extra("")//携带额外参数
             .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
             .callback(new ItgProgressback() {
                 @Override
@@ -239,6 +240,7 @@ Task task = ItgNetSend.itg()
             .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")//下载数据保存路径
             .append(true)//启用断点续传(支持断点续传，不然会下载失败)
 	        .broadcast(true)//现在完成后，调用完成广播
+	        .extra("")//携带额外参数
             .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
             .registerCallback()//设置可恢复监听
             .task();
@@ -273,7 +275,7 @@ ItgNetSend.itg().callbackMgr().removeItgProgress("http://robot.yuanqutech.com:80
 
 ```
 
-> 如果创建下载任务时，启用广播，则下载完成后，后启用下面广播(action不能修改)
+> 如果创建下载任务时，启用默认广播，则下载完成后，后启用下面广播(action不能修改)
 
 ```
    <receiver
@@ -284,6 +286,43 @@ ItgNetSend.itg().callbackMgr().removeItgProgress("http://robot.yuanqutech.com:80
                 <action android:name="com.yqtec.install.broadcast" />
             </intent-filter>
         </receiver>
+
+```
+
+> 下载完成时可以自定义广播
+
+```
+Task task = ItgNetSend.itg()
+            .itgDownlad()//获取网络下载工具
+            .initTask()//初始化任务
+            .url("http://robot.yuanqutech.com:8030/ver/download?id=205")//设置下载地址
+            .path(Environment.getExternalStorageDirectory() + "/cd/download.apk")//下载数据保存路径
+            .append(true)//启用断点续传(支持断点续传，不然会下载失败)
+	        .broadcast(false)//禁止默认广播，设置自定义广播后默认广播无法启动
+	        .customBroadcast("")//参数设为广播的action
+	        .extra("")//携带额外参数
+            .broadcastComponentName("com.yqtec.sesame.composition.common.broadcast.ApkInstallBroadcast")////android9必须传入
+            .registerCallback()//设置可恢复监听
+            .task();
+
+ItgNetSend.itg().itgDownlad().start(task);
+```
+
+
+>启用广播可以携带的参数
+```
+public class xxx extends BroadcastReceiver {
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+           
+          String url = intent.getStringExtra("url");//设置下载地址
+          String file = intent.getStringExtra("file");/下载数据保存路径
+          String extra = intent.getStringExtra("extra");//携带额外参数
+         
+    }
+}
+
 
 ```
 
