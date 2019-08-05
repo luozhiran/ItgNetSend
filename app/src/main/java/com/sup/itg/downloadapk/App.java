@@ -2,7 +2,6 @@ package com.sup.itg.downloadapk;
 
 import android.app.Application;
 
-import com.sup.itg.netlib.ItgLog;
 import com.sup.itg.netlib.ItgNetSend;
 
 public class App extends Application {

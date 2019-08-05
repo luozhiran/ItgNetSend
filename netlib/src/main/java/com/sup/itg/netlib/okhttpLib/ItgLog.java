@@ -1,6 +1,8 @@
-package com.sup.itg.netlib;
+package com.sup.itg.netlib.okhttpLib;
 
 import android.util.Log;
+
+import com.sup.itg.netlib.ItgNetSend;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -76,7 +78,7 @@ public class ItgLog {
      *
      * @param message
      */
-    public static void httpWtf(String message) {
+    protected static void httpWtf(String message) {
         if (PRINT_LOG) {
             getMethodNames(new Throwable().getStackTrace());
             Log.wtf(className, createLog(message));

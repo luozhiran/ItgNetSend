@@ -11,14 +11,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.sup.itg.netlib.ItgLog;
+import com.sup.itg.netlib.okhttpLib.ItgLog;
 import com.sup.itg.netlib.ItgNetSend;
 import com.sup.itg.netlib.okhttpLib.Task;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgCallback;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgTask;
 import com.sup.itg.netlib.okhttpLib.interfaces.ItgProgressback;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

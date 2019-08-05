@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
-import com.sup.itg.netlib.ItgLog;
 import com.sup.itg.netlib.ItgNetSend;
 import com.sup.itg.netlib.okhttpLib.interfaces.Builder;
 import com.sup.itg.netlib.okhttpLib.interfaces.Dispatch;
