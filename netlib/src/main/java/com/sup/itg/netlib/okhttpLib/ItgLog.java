@@ -98,14 +98,22 @@ public class ItgLog {
 
 
     private static void write(String log, String path) {
+        OutputStreamWriter write = null;
         try {
-            OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(path, true), "utf-8");
+            write = new OutputStreamWriter(new FileOutputStream(path, true), "utf-8");
             BufferedWriter writer = new BufferedWriter(write);
             writer.write(log);
             writer.flush();
-            writer.close();
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
+            if (write != null) {
+                try {
+                    write.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
             e.printStackTrace();
         }
 
