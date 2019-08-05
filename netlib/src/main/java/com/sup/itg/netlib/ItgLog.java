@@ -1,10 +1,8 @@
 package com.sup.itg.netlib;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -14,6 +12,14 @@ public class ItgLog {
     private static String methodName = "";
     private static int lineNumber;
     private static boolean PRINT_LOG = true;
+
+    public static void openLog() {
+        PRINT_LOG = true;
+    }
+
+    public static void closeLog() {
+        PRINT_LOG = false;
+    }
 
     private static String createLog(String log) {
         StringBuffer buffer = new StringBuffer();
@@ -65,17 +71,31 @@ public class ItgLog {
         }
     }
 
-    public static void wtf(String message) {
+    /**
+     * 写http日志
+     *
+     * @param message
+     */
+    public static void httpWtf(String message) {
         if (PRINT_LOG) {
             getMethodNames(new Throwable().getStackTrace());
             Log.wtf(className, createLog(message));
-            write(lineNumber + " ---> " + message + "\r\n");
+            StringBuilder sb = new StringBuilder();
+            sb.append(ItgNetSend.itg().itgSet().today()).append("：").append(lineNumber).append("：").append(message).append("\r\n");
+            write(sb.toString(), ItgNetSend.itg().itgSet().getHttpLog());
+        }
+    }
+
+    public static void wtf(String message) {
+        if (PRINT_LOG) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(ItgNetSend.itg().itgSet().today()).append("：").append(message).append("\r\n");
+            write(sb.toString(), ItgNetSend.itg().itgSet().getDebugLog());
         }
     }
 
 
-    private static void write(String log) {
-        String path = ItgNetSend.itg().itgSet().getLog();
+    private static void write(String log, String path) {
         try {
             OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(path, true), "utf-8");
             BufferedWriter writer = new BufferedWriter(write);

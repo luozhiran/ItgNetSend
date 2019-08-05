@@ -78,7 +78,7 @@ public class DispatchTool implements Dispatch {
             }
             if (!mParamTasksUrl.contains(task.url())) {
                 if (!mRunningTasksUrl.contains(task.url())) {
-                    if (mRunningTasks.size() <= ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
+                    if (mRunningTasks.size() < ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
                         mRunningTasks.add(task);
                         mRunningTasksUrl.add(task.url());
                         return true;
@@ -92,7 +92,7 @@ public class DispatchTool implements Dispatch {
                 }
             } else {
                 if (!mRunningTasks.contains(task)) {
-                    if (mRunningTasks.size() <= ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
+                    if (mRunningTasks.size() < ItgNetSend.itg().itgSet().MAX_DOWNLOAD_NUM) {
                         mParamTasksUrl.remove(task.url());
                         mParamTasks.remove(task);
                         mRunningTasksUrl.add(task.url());
@@ -133,7 +133,7 @@ public class DispatchTool implements Dispatch {
                     mRunningTasksUrl.remove(task.url());
                 }
                 mItgHandler.sendEmptyMessage(1);
-                ItgLog.wtf(e.getMessage() + " " + task.url());
+                ItgLog.httpWtf(e.getMessage() + " " + task.url());
                 task.itgProgressback().fail(e.getMessage(), task.url());
 
             }
@@ -150,7 +150,7 @@ public class DispatchTool implements Dispatch {
                         }
                         mItgHandler.sendEmptyMessage(1);
                         task.itgProgressback().fail("append can not is true", task.url());
-                        ItgLog.wtf("append can not is true" + "  " + task.url());
+                        ItgLog.httpWtf("append can not is true" + "  " + task.url());
                     }
                 } else {
                     if (response.code() == 200) {
@@ -162,7 +162,7 @@ public class DispatchTool implements Dispatch {
                         }
                         mItgHandler.sendEmptyMessage(1);
                         task.itgProgressback().fail("response.code() = " + response.code(), task.url());
-                        ItgLog.wtf("response.code() = " + response.code() + "  " + task.url());
+                        ItgLog.httpWtf("response.code() = " + response.code() + "  " + task.url());
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class DispatchTool implements Dispatch {
         }
         if (!mkSuccess) {
             response.body().close();
-            ItgLog.wtf("check path " + task.url());
+            ItgLog.httpWtf("check path " + task.url());
         } else {
             /*  将网络流中的文件写入本地*/
             streamHander(response.body().byteStream(), file, task);
@@ -207,7 +207,7 @@ public class DispatchTool implements Dispatch {
                         mRunningTasksUrl.remove(task.url());
                     }
                     mItgHandler.sendEmptyMessage(1);
-                    ItgLog.wtf(e.getMessage() + " " + task.url());
+                    ItgLog.httpWtf(e.getMessage() + " " + task.url());
                     task.itgProgressback().fail(e.getMessage(), task.url());
 
                 }
@@ -227,7 +227,7 @@ public class DispatchTool implements Dispatch {
                             mRunningTasks.remove(task);
                         }
                         task.itgProgressback().fail("response.code() = " + response.code(), task.url());
-                        ItgLog.wtf("response.code() = " + response.code() + "  " + task.url());
+                        ItgLog.httpWtf("response.code() = " + response.code() + "  " + task.url());
                         mItgHandler.sendEmptyMessage(1);
                     }
                 }
@@ -271,7 +271,7 @@ public class DispatchTool implements Dispatch {
                 task.downloadSize(file.length());
                 cur = task.getProgress();
                 if (!TextUtils.isEmpty(task.cancel()) && task.url().equals(task.cancel())) {
-                    ItgLog.wtf("cancel " + task.url());
+                    ItgLog.httpWtf("cancel " + task.url());
                     new File(task.path() + ".tmp").delete();
                     synchronized (mLock) {
                         mRunningTasksUrl.remove(task.url());

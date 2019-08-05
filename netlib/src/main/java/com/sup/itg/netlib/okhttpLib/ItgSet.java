@@ -1,6 +1,7 @@
 package com.sup.itg.netlib.okhttpLib;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 
@@ -8,12 +9,16 @@ import com.sup.itg.netlib.ItgNetSend;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ItgSet {
     protected Context mContext;
     protected String mItgUrl;
     protected String mLogPath;
     protected int MAX_DOWNLOAD_NUM = 3;
+    protected SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private String mPkgName;
 
     private Handler mHandler;
 
@@ -22,11 +27,13 @@ public class ItgSet {
         return mItgUrl;
     }
 
-    public String getLog() {
+    public String getHttpLog() {
         if (TextUtils.isEmpty(mLogPath)) {
-            String path = mContext.getExternalFilesDir("log").getAbsolutePath();
-            path = path + "/log.txt";
-            File file = new File(path);
+            File file = Environment.getExternalStorageDirectory();
+            file = new File(file, "/itg/http.txt");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
             if (!file.exists()) {
                 try {
                     file.createNewFile();
@@ -56,8 +63,34 @@ public class ItgSet {
         }
     }
 
+    public String getDebugLog() {
+        File file = Environment.getExternalStorageDirectory();
+        file = new File(file, "/itg/" + mPkgName + "/debug.txt");
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (file.length() > 1024 * 1024 * 5) {
+                file.delete();
+            }
+        }
+        return file.getAbsolutePath();
+    }
+
+    public String today() {
+        String today = mDateFormat.format(new Date());
+        return today;
+    }
+
     public ItgSet app(Context context) {
         mContext = context;
+        mPkgName = context.getPackageName();
         return this;
     }
 
