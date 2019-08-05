@@ -30,7 +30,7 @@ public class ItgSet {
     public String getHttpLog() {
         if (TextUtils.isEmpty(mLogPath)) {
             File file = Environment.getExternalStorageDirectory();
-            file = new File(file, "/itg/http.txt");
+            file = new File(file, "/itg/" + mPkgName + "/httpLog.txt");
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }

@@ -9,8 +9,8 @@ public class App extends Application {
         ItgNetSend.itg()
         .itgSet()//获取网络配置工具
         .app(this)//保存全局context
-        .log("")//设置输入日志路径
-        .url("http://www.baidu.com");//输入全局地址，设置此项后，在使用网络请求时，没有输入地址，则              使用该地址请求
+        .url("http://www.baidu.com");//输入全局地址，设置此项后，在使用网络请求时，没有输入地址，则使用该地址请求
+        ItgLog.openLog();//打开日志 日志路径在:(1):/sdcard/itg/包名/httpLog.txt. (2)/sdcard/itg/包名/debug.txt 【使用ItgLog.wtf("")记录信息到本地sd卡上】
     }
 }
 
