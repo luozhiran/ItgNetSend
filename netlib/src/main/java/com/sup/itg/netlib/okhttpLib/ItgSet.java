@@ -99,6 +99,7 @@ public class ItgSet {
         return this;
     }
 
+    @Deprecated
     public ItgSet log(String path) {
         mLogPath = path;
         return this;
