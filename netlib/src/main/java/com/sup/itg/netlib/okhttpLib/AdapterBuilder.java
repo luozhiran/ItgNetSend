@@ -237,7 +237,8 @@ public abstract class AdapterBuilder implements Builder {
             if (mContents != null && mContents.size() == 1 && mFiles == null) {
                 return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
             } else if (mFiles != null && mFiles.size() == 1) {
-                return getUpdateFileRequestBody(mFiles.get(0));
+//                return getUpdateFileRequestBody(mFiles.get(0));
+                return getMultipartBody();
             } else if (!TextUtils.isEmpty(mParamSb) && mContents == null && mFiles == null) {
                 return getFormBody();
             } else {
