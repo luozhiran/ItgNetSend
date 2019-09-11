@@ -10,6 +10,7 @@ public class ItgNetSend {
     public static final int GET = 1;
     public static final int POST = 2;
     public static final int DELETE = 3;
+    public static final int PUT = 4;
 
     public static final String MEDIA_JSON = "application/json; charset=utf-8";
     public static final String MEDIA_OCTET_STREAM = "application/octet-stream";
