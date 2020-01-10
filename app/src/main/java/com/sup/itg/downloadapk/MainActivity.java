@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 .itg()
                 .builder(ItgNetSend.POST)
                 .url("http://robot.yuanqutech.com:8031/hh/tm")
-                .addParam("tid", "yq002")
-                .addParam("sdt", String.valueOf((System.currentTimeMillis() / 1000)))
-                .addParam("etk", "23")
-                .addParam("gid", String.valueOf("1"))
-                .addParam("qid", "123")
-                .addParam("sid", "1213")
-                .addParam("ans", "fasd")
+                .addFormParam("tid", "yq002")
+                .addFormParam("sdt", String.valueOf((System.currentTimeMillis() / 1000)))
+                .addFormParam("etk", "23")
+                .addFormParam("gid", String.valueOf("1"))
+                .addFormParam("qid", "123")
+                .addFormParam("sid", "1213")
+                .addFormParam("ans", "fasd")
                 .send(new ItgCallback() {
                     @Override
                     public void onFailure(String er) {

@@ -58,7 +58,7 @@ public abstract class AdapterBuilder implements Builder {
 
     @Override
     final public Builder addFormParam(String key, String value) {
-         mParamFormSb.append(key).append("#").append(value).append("$");
+        mParamFormSb.append(key).append("#").append(value).append("$");
         return this;
     }
 
@@ -228,7 +228,7 @@ public abstract class AdapterBuilder implements Builder {
                 String params = mParamSb.toString();
                 for (String s : key_value) {
                     if (!params.contains(s)) {
-                        urlParams.append(key_value).append("$");
+                        urlParams.append(s).append("$");
                     }
                 }
             }
@@ -265,10 +265,9 @@ public abstract class AdapterBuilder implements Builder {
         if (mIntervalFile != null) {
             return getIntervalBody();
         } else {
-
             if (mContents != null && mContents.size() == 1 && mFiles == null) {
                 return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
-            } else if (mContents == null&&mFiles != null && mFiles.size() == 1) {
+            } else if (mContents == null && mFiles != null && mFiles.size() == 1) {
                 return getUpdateFileRequestBody(mFiles.get(0));
             } else if (!TextUtils.isEmpty(mParamFormSb) && mContents == null && mFiles == null) {
                 return getFormBody();
@@ -328,6 +327,8 @@ public abstract class AdapterBuilder implements Builder {
     private MultipartBody getMultipartBody() {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
+
+        boolean hasVaule = false;
         if (!TextUtils.isEmpty(mParamFormSb) && mParamFormSb.length() > 0) {
             String[] key_value = mParamFormSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
@@ -336,6 +337,7 @@ public abstract class AdapterBuilder implements Builder {
                 if (s != null && s.length == 2) {
                     builder.addFormDataPart(s[0], s[1]);
                 }
+                hasVaule = true;
             }
         }
         if (mContents != null && mContents.size() > 0) {
@@ -346,6 +348,7 @@ public abstract class AdapterBuilder implements Builder {
                 builder.addFormDataPart(mContentNames.get(count), null, requestBody);
                 count++;
             }
+            hasVaule = true;
         }
 
         if (mFiles != null) {
@@ -355,6 +358,11 @@ public abstract class AdapterBuilder implements Builder {
                 builder.addFormDataPart(mFileNames.get(count), file.getName(), fileBody);
                 count++;
             }
+            hasVaule = true;
+        }
+
+        if (!hasVaule) {
+            builder.addFormDataPart("body", "not appropriate body");
         }
         return builder.build();
     }
