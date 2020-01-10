@@ -16,14 +16,12 @@ public class App extends Application {
     }
 }
 
-
+```
 
  注意：addFormParam()和addParam()区别
  addFormParam()用于在POST请求中，把参数用在FormBody重上传给服务器
  addParam()把参数放在url的后面传递给服务器
 
-
-```
 #### ItgNetSend GET请求
 > 1.使用全局地址请求（在App中通过ItgNetSend.itg().url("http://www.baidu.com")设置）
 ```
