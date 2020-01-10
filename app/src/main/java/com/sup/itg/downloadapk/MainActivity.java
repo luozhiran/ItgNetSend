@@ -84,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 .append(true)
                 .callback(new ItgProgressback() {
                     @Override
+                    public void connecting(ItgTask task) {
+
+                    }
+
+                    @Override
                     public void itgProgress(ItgTask task) {
 
 

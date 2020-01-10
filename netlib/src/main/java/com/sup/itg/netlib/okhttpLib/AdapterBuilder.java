@@ -33,6 +33,7 @@ public abstract class AdapterBuilder implements Builder {
     protected String mUrl = ItgNetSend.itg().itgSet().getItgUrl();
     protected StringBuilder mHeaderSb = new StringBuilder();
     protected StringBuilder mParamSb = new StringBuilder();
+    protected StringBuilder mParamFormSb = new StringBuilder();//以表单的心事上传
     protected List<File> mFiles;
     protected List<String> mFileNames;
     protected List<String> mFileMediaTypes;
@@ -52,6 +53,12 @@ public abstract class AdapterBuilder implements Builder {
     @Override
     final public Builder addParam(String key, String value) {
         mParamSb.append(key).append("#").append(value).append("$");
+        return this;
+    }
+
+    @Override
+    final public Builder addFormParam(String key, String value) {
+         mParamFormSb.append(key).append("#").append(value).append("$");
         return this;
     }
 
@@ -211,10 +218,34 @@ public abstract class AdapterBuilder implements Builder {
 
     }
 
+
+    private StringBuilder combindParam() {
+        String localParam = ItgNetSend.itg().itgSet().getLocalParam();
+        StringBuilder urlParams = new StringBuilder();
+        if (!TextUtils.isEmpty(localParam)) {
+            String[] key_value = localParam.split("[$]");
+            if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
+                String params = mParamSb.toString();
+                for (String s : key_value) {
+                    if (!params.contains(s)) {
+                        urlParams.append(key_value).append("$");
+                    }
+                }
+            }
+            urlParams.append(mParamSb);
+        } else {
+            return mParamSb;
+        }
+
+        return urlParams;
+
+    }
+
     protected String getParam() {
-        if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
+        StringBuilder urlParam = combindParam();
+        if (!TextUtils.isEmpty(urlParam) && urlParam.length() > 0) {
             Uri.Builder urlBuild = Uri.parse(mUrl).buildUpon();
-            String[] key_value = mParamSb.toString().split("[$]");
+            String[] key_value = urlParam.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return mUrl;
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -234,11 +265,12 @@ public abstract class AdapterBuilder implements Builder {
         if (mIntervalFile != null) {
             return getIntervalBody();
         } else {
+
             if (mContents != null && mContents.size() == 1 && mFiles == null) {
                 return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
-            } else if (mFiles != null && mFiles.size() == 1) {
+            } else if (mContents == null&&mFiles != null && mFiles.size() == 1) {
                 return getUpdateFileRequestBody(mFiles.get(0));
-            } else if (!TextUtils.isEmpty(mParamSb) && mContents == null && mFiles == null) {
+            } else if (!TextUtils.isEmpty(mParamFormSb) && mContents == null && mFiles == null) {
                 return getFormBody();
             } else {
                 return getMultipartBody();
@@ -267,8 +299,8 @@ public abstract class AdapterBuilder implements Builder {
 
     private FormBody getFormBody() {
         FormBody.Builder builder = new FormBody.Builder();
-        if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
-            String[] key_value = mParamSb.toString().split("[$]");
+        if (!TextUtils.isEmpty(mParamFormSb) && mParamFormSb.length() > 0) {
+            String[] key_value = mParamFormSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -296,8 +328,8 @@ public abstract class AdapterBuilder implements Builder {
     private MultipartBody getMultipartBody() {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
-        if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
-            String[] key_value = mParamSb.toString().split("[$]");
+        if (!TextUtils.isEmpty(mParamFormSb) && mParamFormSb.length() > 0) {
+            String[] key_value = mParamFormSb.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
             for (String value : key_value) {
                 String[] s = value.split("#");

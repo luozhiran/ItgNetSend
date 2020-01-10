@@ -19,6 +19,7 @@ public class ItgSet {
     protected int MAX_DOWNLOAD_NUM = 3;
     protected SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private String mPkgName;
+    private StringBuilder mLocalParams = new StringBuilder();
 
     private Handler mHandler;
 
@@ -119,5 +120,14 @@ public class ItgSet {
             }
         }
         return mHandler;
+    }
+
+    public ItgSet addLocalParam(String key, String value) {
+        mLocalParams.append(key).append("#").append(value).append("$");
+        return this;
+    }
+
+    public String getLocalParam() {
+        return mLocalParams.toString();
     }
 }

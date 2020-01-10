@@ -9,10 +9,17 @@ public class App extends Application {
         ItgNetSend.itg()
         .itgSet()//获取网络配置工具
         .app(this)//保存全局context
+        .addLocalParam("key1","a")//设置全局参数，后面的每次请求都会加入到url后面，http://www.baidu.com?key1=a&key2=b
+        .addLocalParam("key2","b");
         .url("http://www.baidu.com");//输入全局地址，设置此项后，在使用网络请求时，没有输入地址，则使用该地址请求
         ItgLog.openLog();//打开日志 日志路径在:/sdcard/itg/包名/debug.txt 【使用ItgLog.wtf("")记录信息到本地sd卡上】
     }
 }
+
+注意：addFormParam()和addParam()区别
+ addFormParam()用于在POST请求中，把参数用在FormBody重上传给服务器
+ addParam()把参数放在url的后面传递给服务器
+
 
 ```
 #### ItgNetSend GET请求

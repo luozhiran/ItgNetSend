@@ -8,6 +8,10 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ItgNetSend.itg().itgSet().app(this).url("http://www.baidu.com");
+        ItgNetSend.itg().itgSet()
+                .app(this)
+                .url("http://www.baidu.com")
+                .addLocalParam("key1","a")
+                .addLocalParam("key2","b");
     }
 }

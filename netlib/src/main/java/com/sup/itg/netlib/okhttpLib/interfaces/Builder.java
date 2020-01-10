@@ -13,6 +13,8 @@ public interface Builder {
 
     Builder addHeader(String key, String value);
 
+    Builder addFormParam(String key, String value);
+
     Builder url(String url);
 
     void send(ItgCallback callback);
