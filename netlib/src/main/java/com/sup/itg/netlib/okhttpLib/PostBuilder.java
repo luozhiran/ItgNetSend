@@ -25,9 +25,8 @@ public class PostBuilder extends AdapterBuilder {
         if (headers != null) {
             builder.headers(headers);
         }
-        String url = getParam();
-        builder.tag(url);
-        builder.url(url);
+        builder.tag(mUrl);
+        builder.url(mUrl);
         builder.post(getRequestBody());
         Call call = mOkHttpClient.newCall(builder.build());
         return call;

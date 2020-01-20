@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class ItgSet {
     protected Context mContext;
@@ -19,7 +20,7 @@ public class ItgSet {
     protected int MAX_DOWNLOAD_NUM = 3;
     protected SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private String mPkgName;
-    private StringBuilder mLocalParams = new StringBuilder();
+    private HashMap<String, String> mLocalParams = new HashMap<>();
 
     private Handler mHandler;
 
@@ -123,13 +124,13 @@ public class ItgSet {
     }
 
     public ItgSet addLocalParam(String key, String value) {
-        if (!mLocalParams.toString().contains(key+"#"+value)) {
-            mLocalParams.append(key).append("#").append(value).append("$");
+        if (!mLocalParams.containsKey(key)) {
+            mLocalParams.put(key, value);
         }
         return this;
     }
 
-    public String getLocalParam() {
-        return mLocalParams.toString();
+    public HashMap<String, String> getLocalParam() {
+        return mLocalParams;
     }
 }

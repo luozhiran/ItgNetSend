@@ -58,56 +58,6 @@ public class App extends Application {
 
 
 ```
-#### ItgNetSend POST请求
- 1.如果想在post请求模式中，在url后面拼接一些参数可以使用PostBuilder类，
- 拼接http://www.baidu.com?key=abc&key1=fd；
-
-```
-        PostBuilder postBuilder = (PostBuilder) ItgNetSend
-                .itg()
-                .builder(ItgNetSend.POST);
-        postBuilder.appendUrl("key", "abc");
-        postBuilder.appendUrl("key1", "fd");
-        postBuilder.url("http://robot.yuanqutech.com:8031/hh/tm")
-                .send(new ItgCallback() {
-                    @Override
-                    public void onFailure(String er) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String result, int code) {
-                        Log.e("math_err", result);
-                    }
-                });
-
-
-```
-2.Post模式使用addParam("key","value")
-    addParam()把参数放在post模式的表单中上传给服务器
-    好比浏览器中，可以在url后面拼接参数，用户可以看到，而使用addParam()，和jsp中的FORM一样，也是传递数据，但是用户不可见
-```
-           ItgNetSend
-                       .itg()
-                       .builder(ItgNetSend.POST)
-                       .url("http://robot.yuanqutech.com:8031/hh/tm")
-                       .addParam("etk", "23")
-                       .addParam("gid", String.valueOf("1"))
-                       .addParam("qid", "123")
-                       .addParam("sid", "1213")
-                       .addParam("ans", "fasd")
-                       .send(new ItgCallback() {
-                           @Override
-                           public void onFailure(String er) {
-
-                           }
-
-                           @Override
-                           public void onResponse(String result, int code) {
-                               Log.e("math_err", result);
-                           }
-                       });
-```
 
 #### ItgNetSend 上传字符串
 >　1.上传一个字符串（addContent("","")）

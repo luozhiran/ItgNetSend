@@ -32,8 +32,7 @@ public abstract class AdapterBuilder implements Builder {
     protected OkHttpClient mOkHttpClient;
     protected String mUrl = ItgNetSend.itg().itgSet().getItgUrl();
     protected StringBuilder mHeaderSb = new StringBuilder();
-    protected StringBuilder mParamSb = new StringBuilder();
-    protected StringBuilder mParamFormSb = new StringBuilder();//以表单的心事上传
+    protected StringBuilder mParamSb = new StringBuilder();//以表单的心事上传
     protected List<File> mFiles;
     protected List<String> mFileNames;
     protected List<String> mFileMediaTypes;
@@ -52,7 +51,7 @@ public abstract class AdapterBuilder implements Builder {
 
     @Override
     final public Builder addParam(String key, String value) {
-        mParamFormSb.append(key).append("#").append(value).append("$");
+        mParamSb.append(key).append("#").append(value).append("$");
         return this;
     }
 
@@ -214,30 +213,31 @@ public abstract class AdapterBuilder implements Builder {
     }
 
 
-    private StringBuilder combindParam() {
-        String localParam = ItgNetSend.itg().itgSet().getLocalParam();
-        StringBuilder urlParams = new StringBuilder();
-        if (!TextUtils.isEmpty(localParam)) {
-            String[] key_value = localParam.split("[$]");
-            if (!TextUtils.isEmpty(mParamSb) && mParamSb.length() > 0) {
-                String params = mParamSb.toString();
-                for (String s : key_value) {
-                    if (!params.contains(s)) {
-                        urlParams.append(s).append("$");
-                    }
+    /**
+     * 过滤参数，把可用参数和全局参数合并，并剔除重复参数
+     *
+     * @return
+     */
+    private StringBuilder mergeParam(StringBuilder requestParams) {
+        HashMap<String, String> hashMap = ItgNetSend.itg().itgSet().getLocalParam();
+        if (hashMap.size() > 0) {
+            StringBuilder localBuild = new StringBuilder();
+            String params = requestParams.toString();
+            for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+                String str = entry.getKey() + "#" + entry.getValue();
+                if (!params.contains(str)) {
+                    localBuild.append(str).append("$");
                 }
             }
-            urlParams.append(mParamSb);
+            return localBuild.append(requestParams);
         } else {
-            return mParamSb;
+            return requestParams;
         }
-
-        return urlParams;
 
     }
 
     protected String getParam() {
-        StringBuilder urlParam = combindParam();
+        StringBuilder urlParam = mergeParam(mParamSb);
         if (!TextUtils.isEmpty(urlParam) && urlParam.length() > 0) {
             Uri.Builder urlBuild = Uri.parse(mUrl).buildUpon();
             String[] key_value = urlParam.toString().split("[$]");
@@ -257,17 +257,18 @@ public abstract class AdapterBuilder implements Builder {
 
 
     protected RequestBody getRequestBody() {
+        StringBuilder formParams = mergeParam(mParamSb);
         if (mIntervalFile != null) {
             return getIntervalBody();
         } else {
-            if (mContents != null && mContents.size() == 1 && mFiles == null) {
+            if (mContents != null && mContents.size() == 1 && mFiles == null && TextUtils.isEmpty(formParams)) {
                 return getUpdateStringRequestBody(mContentMediaTypes.get(0), mContents.get(0));
-            } else if (mContents == null && mFiles != null && mFiles.size() == 1) {
+            } else if (mContents == null && mFiles != null && mFiles.size() == 1 && TextUtils.isEmpty(formParams)) {
                 return getUpdateFileRequestBody(mFiles.get(0));
-            } else if (!TextUtils.isEmpty(mParamFormSb) && mContents == null && mFiles == null) {
-                return getFormBody();
+            } else if (!TextUtils.isEmpty(formParams) && mContents == null && mFiles == null) {
+                return getFormBody(formParams);
             } else {
-                return getMultipartBody();
+                return getMultipartBody(formParams);
             }
         }
     }
@@ -291,10 +292,10 @@ public abstract class AdapterBuilder implements Builder {
     }
 
 
-    private FormBody getFormBody() {
+    private FormBody getFormBody(StringBuilder formParams) {
         FormBody.Builder builder = new FormBody.Builder();
-        if (!TextUtils.isEmpty(mParamFormSb) && mParamFormSb.length() > 0) {
-            String[] key_value = mParamFormSb.toString().split("[$]");
+        if (!TextUtils.isEmpty(formParams) && formParams.length() > 0) {
+            String[] key_value = formParams.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
             for (String value : key_value) {
                 String[] s = value.split("#");
@@ -319,13 +320,13 @@ public abstract class AdapterBuilder implements Builder {
         return body;
     }
 
-    private MultipartBody getMultipartBody() {
+    private MultipartBody getMultipartBody(StringBuilder formParams) {
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
 
         boolean hasVaule = false;
-        if (!TextUtils.isEmpty(mParamFormSb) && mParamFormSb.length() > 0) {
-            String[] key_value = mParamFormSb.toString().split("[$]");
+        if (!TextUtils.isEmpty(formParams) && formParams.length() > 0) {
+            String[] key_value = formParams.toString().split("[$]");
             if (key_value == null || key_value.length == 0) return builder.build();
             for (String value : key_value) {
                 String[] s = value.split("#");

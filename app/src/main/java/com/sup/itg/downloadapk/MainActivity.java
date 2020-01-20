@@ -50,15 +50,12 @@ public class MainActivity extends AppCompatActivity {
 //
 //                });
 
+        ItgNetSend.itg().itgSet().addLocalParam("key1","a");
         ItgNetSend
                 .itg()
-                .builder(ItgNetSend.POST)
-                .url("http://robot.yuanqutech.com:8031/hh/tm")
-                .addParam("etk", "23")
-                .addParam("gid", String.valueOf("1"))
-                .addParam("qid", "123")
-                .addParam("sid", "1213")
-                .addParam("ans", "fasd")
+                .builder(ItgNetSend.GET)
+                .url("http://www.baidu.com")
+                .addParam("key1", "a")
                 .send(new ItgCallback() {
                     @Override
                     public void onFailure(String er) {
