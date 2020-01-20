@@ -124,9 +124,10 @@ public class ItgSet {
     }
 
     public ItgSet addLocalParam(String key, String value) {
-        if (!mLocalParams.containsKey(key)) {
-            mLocalParams.put(key, value);
+        if (mLocalParams.containsKey(key)) {
+            mLocalParams.remove(key);
         }
+        mLocalParams.put(key, value);
         return this;
     }
 
