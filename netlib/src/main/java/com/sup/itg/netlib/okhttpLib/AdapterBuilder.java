@@ -52,15 +52,10 @@ public abstract class AdapterBuilder implements Builder {
 
     @Override
     final public Builder addParam(String key, String value) {
-        mParamSb.append(key).append("#").append(value).append("$");
-        return this;
-    }
-
-    @Override
-    final public Builder addFormParam(String key, String value) {
         mParamFormSb.append(key).append("#").append(value).append("$");
         return this;
     }
+
 
     @Override
     final public Builder addHeader(String key, String value) {

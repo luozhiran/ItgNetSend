@@ -123,7 +123,9 @@ public class ItgSet {
     }
 
     public ItgSet addLocalParam(String key, String value) {
-        mLocalParams.append(key).append("#").append(value).append("$");
+        if (!mLocalParams.toString().contains(key+"#"+value)) {
+            mLocalParams.append(key).append("#").append(value).append("$");
+        }
         return this;
     }
 
