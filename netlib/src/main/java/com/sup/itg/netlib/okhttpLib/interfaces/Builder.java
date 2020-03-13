@@ -36,4 +36,5 @@ public interface Builder {
     Builder addCookie(Cookie cookie);
 
     Builder addCookie(List<Cookie> cookie);
+    Builder addTag(String tag);
 }

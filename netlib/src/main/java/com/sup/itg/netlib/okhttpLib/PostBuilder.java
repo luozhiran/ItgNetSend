@@ -1,5 +1,7 @@
 package com.sup.itg.netlib.okhttpLib;
 
+import android.text.TextUtils;
+
 import com.sup.itg.netlib.okhttpLib.interfaces.Builder;
 
 import okhttp3.Call;
@@ -25,7 +27,7 @@ public class PostBuilder extends AdapterBuilder {
         if (headers != null) {
             builder.headers(headers);
         }
-        builder.tag(mUrl);
+        builder.tag(TextUtils.isEmpty(mTag)?mUrl:mTag);
         builder.url(mUrl);
         builder.post(getRequestBody());
         Call call = mOkHttpClient.newCall(builder.build());

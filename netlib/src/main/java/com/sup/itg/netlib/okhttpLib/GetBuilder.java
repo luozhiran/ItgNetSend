@@ -29,7 +29,7 @@ public class GetBuilder extends AdapterBuilder {
         }
         String url = getParam();
         builder.url(url);
-        builder.tag(url);
+        builder.tag(TextUtils.isEmpty(mTag)?url:mTag);
         builder.get();
         Call call = mOkHttpClient.newCall(builder.build());
         return call;

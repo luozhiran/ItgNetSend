@@ -6,6 +6,8 @@ import com.sup.itg.netlib.okhttpLib.ItgDownload;
 import com.sup.itg.netlib.okhttpLib.ItgSet;
 import com.sup.itg.netlib.okhttpLib.OkhttpMgr;
 
+import okhttp3.Call;
+
 public class ItgNetSend {
     public static final int GET = 1;
     public static final int POST = 2;
@@ -59,5 +61,29 @@ public class ItgNetSend {
     public Builder builder(int type) {
         return RequestFactory.create(type, mOkhttpMgr.mOkHttpClient);
     }
+
+    public void cancelAll(){
+        for (Call call:mOkhttpMgr.mOkHttpClient.dispatcher().queuedCalls()){
+            call.cancel();
+        }
+        for (Call call:mOkhttpMgr.mOkHttpClient.dispatcher().runningCalls()){
+            call.cancel();
+        }
+    }
+
+    public void cancelTag(Object tag) {
+        if (tag == null) return;
+        for (Call call : mOkhttpMgr.mOkHttpClient.dispatcher().queuedCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+        for (Call call : mOkhttpMgr.mOkHttpClient.dispatcher().runningCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+    }
+
 
 }

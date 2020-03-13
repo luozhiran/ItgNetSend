@@ -44,6 +44,7 @@ public abstract class AdapterBuilder implements Builder {
     protected long mIntervalOffset;
     protected File mIntervalFile;
     protected String mCookies;
+    protected String mTag;
 
     public AdapterBuilder(OkHttpClient okHttpClient) {
         mOkHttpClient = okHttpClient;
@@ -178,6 +179,12 @@ public abstract class AdapterBuilder implements Builder {
             cookieHeader.append(cookie.name()).append('=').append(cookie.value());
         }
         mCookies = cookieHeader.toString();
+        return this;
+    }
+
+    @Override
+    public Builder addTag(String tag) {
+        mTag = tag;
         return this;
     }
 

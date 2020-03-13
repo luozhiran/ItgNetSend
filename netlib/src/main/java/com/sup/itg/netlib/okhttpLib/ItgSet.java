@@ -21,8 +21,8 @@ public class ItgSet {
     protected SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private String mPkgName;
     private HashMap<String, String> mLocalParams = new HashMap<>();
-
     private Handler mHandler;
+
 
 
     public String getItgUrl() {
